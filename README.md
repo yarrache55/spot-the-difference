@@ -34,7 +34,7 @@ The app uses file-based H2 configured in `src/main/resources/application.propert
 
 ### Fonctionnalités
 - **Inscription/Connexion** sécurisée
-- **3 niveaux** avec images manga
+- **3 niveaux** avec images manga de pinterest
 - **Système de score** et sauvegarde
 - **Bouton indice** pour aider 
 - **Leaderboard** (à implémenter)
