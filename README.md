@@ -37,7 +37,6 @@ The app uses file-based H2 configured in `src/main/resources/application.propert
 - **3 niveaux** avec images manga de pinterest
 - **Système de score** et sauvegarde
 - **Bouton indice** pour aider 
-- **Leaderboard** (à implémenter)
 
 
 The database files are created in the working directory of Tomcat (or where the JVM starts).
