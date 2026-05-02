@@ -1,6 +1,6 @@
 # Spot The Difference - Spring MVC 
 
-This project is a classic Spring MVC web application for a "Spot the Difference" game with authentication, leaderboard, and game save/load.
+This project is a Spring MVC web application for a "Spot the Difference" game with authentication, leaderboard, and game save/load.
 
 ## Tech stack
 
