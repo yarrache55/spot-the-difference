@@ -29,7 +29,7 @@ This project is a Spring MVC web application for a "Spot the Difference" game wi
 
 ## Database
 
-The app uses file-based H2 configured in `src/main/resources/application.properties`:
+The app uses file-based H2 configured in `src/main/resources/application.properties`
 
 
 ### Fonctionnalités
