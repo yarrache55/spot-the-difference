@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inscription — Spot the Difference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/manga.css}"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-container">
+    <div class="auth-panel manga-panel">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div>
+        <div class="panel-corner br"></div>
+
+        <div class="auth-header">
+            <div class="eye-logo">👁</div>
+            <h1 class="manga-title">CRÉER UN<br/><span class="title-accent">COMPTE</span></h1>
+            <p class="manga-sub">Rejoins les meilleurs manga-ka !</p>
+        </div>
+
+        <div th:if="${error}" class="manga-alert alert-error">
+            <span class="alert-icon">✗</span>
+            <span th:text="${error}">Erreur</span>
+        </div>
+
+        <form th:action="@{/register}" method="post" class="manga-form">
+            <div class="form-group">
+                <label class="form-label">PSEUDO (3–30 caractères)</label>
+                <input type="text" name="username" class="manga-input"
+                       placeholder="Ton nom de manga-ka..." minlength="3" maxlength="30" required autofocus/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">MOT DE PASSE (min 4 caractères)</label>
+                <input type="password" name="password" class="manga-input"
+                       placeholder="••••••••" minlength="4" required/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">CONFIRMER</label>
+                <input type="password" name="confirmPassword" class="manga-input"
+                       placeholder="••••••••" minlength="4" required/>
+            </div>
+            <button type="submit" class="manga-btn btn-primary">
+                <span class="btn-text">S'INSCRIRE !!</span>
+                <span class="btn-flash">⚡</span>
+            </button>
+        </form>
+
+        <div class="auth-divider"><span>— déjà inscrit ? —</span></div>
+
+        <a th:href="@{/login}" class="manga-btn btn-secondary">SE CONNECTER</a>
+    </div>
+
+    <div class="halftone-bg" aria-hidden="true"></div>
+</div>
+
+<script th:src="@{/js/manga.js}"></script>
+</body>
+</html>

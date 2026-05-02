@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="'Niveau ' + ${level.number} + ' — Spot the Difference'">Niveau</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/manga.css}"/>
+    <link rel="stylesheet" th:href="@{/css/game.css}"/>
+</head>
+<body class="game-body">
+
+<!-- GAME NAV -->
+<nav class="game-nav">
+    <a th:href="@{/menu}" class="nav-back">← MENU</a>
+    <div class="game-nav-center">
+        <span class="level-badge" th:text="'NIVEAU ' + ${level.number}">NIVEAU 1</span>
+        <span class="level-name" th:text="${level.title}">Titre</span>
+    </div>
+    <div class="game-hud">
+        <div class="hud-item">
+            <span class="hud-label">SCORE</span>
+            <span class="hud-value" id="scoreDisplay"
+                  th:text="${gameSession.score}">0</span>
+        </div>
+        <div class="hud-item">
+            <span class="hud-label">TROUVÉ</span>
+            <span class="hud-value">
+                <span id="foundCount" th:text="${gameSession.differencesFound}">0</span>
+                <span th:text="'/' + ${level.totalDifferences}">/3</span>
+            </span>
+        </div>
+        <div class="hud-item" th:if="${level.timeLimit > 0}">
+            <span class="hud-label">TEMPS</span>
+            <span class="hud-value" id="timerDisplay">--</span>
+        </div>
+    </div>
+</nav>
+
+<!-- DESCRIPTION BUBBLE -->
+<div class="speech-bubble">
+    <p th:text="${level.description}">Description du niveau</p>
+</div>
+
+<!-- GAME AREA -->
+<div class="game-area">
+
+    <!-- ORIGINAL IMAGE (left - display only) -->
+    <div class="image-wrapper">
+        <div class="image-label">ORIGINAL</div>
+        <div class="img-container" id="originalContainer">
+            <img th:src="@{${level.originalImage}}"
+                 alt="Image originale"
+                 class="game-image"
+                 id="originalImg"
+                 draggable="false"/>
+            <!-- Show found markers on original too -->
+            <div th:each="diff : ${level.differences}"
+                 th:if="${foundIds.contains(diff.id)}"
+                 class="diff-marker found-marker"
+                 th:style="'left:' + ${diff.xPercent} + '%; top:' + ${diff.yPercent} + '%;'"
+                 aria-hidden="true">✓</div>
+        </div>
+    </div>
+
+    <!-- MODIFIED IMAGE (right - clickable) -->
+    <div class="image-wrapper">
+        <div class="image-label">MODIFIÉE <span class="click-hint">← CLIQUE ICI !</span></div>
+        <div class="img-container" id="modifiedContainer">
+            <img th:src="@{${level.modifiedImage}}"
+                 alt="Image modifiée"
+                 class="game-image clickable-image"
+                 id="modifiedImg"
+                 draggable="false"/>
+
+            <!-- Already found markers (server-side render) -->
+            <div th:each="diff : ${level.differences}"
+                 th:if="${foundIds.contains(diff.id)}"
+                 class="diff-marker found-marker"
+                 th:id="'marker-' + ${diff.id}"
+                 th:style="'left:' + ${diff.xPercent} + '%; top:' + ${diff.yPercent} + '%;'"
+                 aria-hidden="true">✓</div>
+        </div>
+
+        <!-- CLICK FEEDBACK OVERLAY -->
+        <div id="clickFeedback" class="click-feedback" aria-live="polite"></div>
+    </div>
+
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-area">
+    <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"
+             th:style="'width: ' + (${gameSession.differencesFound * 100 / level.totalDifferences}) + '%'"></div>
+    </div>
+    <span class="progress-label">PROGRESSION</span>
+</div>
+
+<!-- HINT BUTTON -->
+<div class="hint-area">
+    <button id="hintButton" class="hint-btn">INDICE</button>
+</div>
+
+<!-- SAVE BUTTON -->
+<div class="save-btn-area">
+    <form th:action="@{/game/save}" method="post" style="display:inline">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="manga-btn btn-save-small">💾 SAUVEGARDER</button>
+    </form>
+</div>
+
+<!-- LEVEL COMPLETE MODAL -->
+<div id="levelCompleteModal" class="modal-overlay" style="display:none">
+    <div class="modal-panel manga-panel">
+        <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+        <div class="modal-eye">👁</div>
+        <h2 class="modal-title">NIVEAU<br/>TERMINÉ !!!</h2>
+        <div class="modal-score">
+            <span class="modal-score-label">SCORE</span>
+            <span class="modal-score-value" id="modalScore">0</span>
+        </div>
+        <div class="modal-actions">
+            <a th:href="@{/game/next/__${level.number}__}" class="manga-btn btn-primary" id="nextBtn">
+                NIVEAU SUIVANT →
+            </a>
+            <a th:href="@{/menu}" class="manga-btn btn-secondary">MENU</a>
+        </div>
+    </div>
+</div>
+
+<!-- TIME UP MODAL -->
+<div id="timeUpModal" class="modal-overlay" style="display:none">
+    <div class="modal-panel manga-panel">
+        <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+        <h2 class="modal-title" style="color:var(--red)">TEMPS<br/>ÉCOULÉ !!</h2>
+        <p class="modal-sub">Tu peux réessayer ce niveau.</p>
+        <div class="modal-actions">
+            <a th:href="@{'/game/' + ${level.number}}" class="manga-btn btn-primary">RÉESSAYER</a>
+            <a th:href="@{/menu}" class="manga-btn btn-secondary">MENU</a>
+        </div>
+    </div>
+</div>
+
+<!-- HIDDEN DATA for JS -->
+<div id="gameData"
+     th:attr="data-level=${level.number},
+              data-time-limit=${level.timeLimit},
+              data-total-diffs=${level.totalDifferences},
+              data-found=${gameSession.differencesFound},
+              data-csrf-token=${_csrf.token},
+              data-csrf-header=${_csrf.headerName}"
+     style="display:none">
+</div>
+
+<script th:src="@{/js/manga.js}"></script>
+<script th:src="@{/js/game.js}"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Connexion — Spot the Difference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/manga.css}"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-container">
+    <!-- MANGA TITLE PANEL -->
+    <div class="auth-panel manga-panel">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div>
+        <div class="panel-corner br"></div>
+
+        <div class="auth-header">
+            <div class="eye-logo">👁</div>
+            <h1 class="manga-title">SPOT THE<br/><span class="title-accent">DIFFERENCE</span></h1>
+            <p class="manga-sub">Le jeu des 7 erreurs ultime!</p>
+        </div>
+
+        <!-- FLASH MESSAGES -->
+        <div th:if="${error}" class="manga-alert alert-error">
+            <span class="alert-icon">✗</span>
+            <span th:text="${error}">Erreur</span>
+        </div>
+        <div th:if="${logout}" class="manga-alert alert-info">
+            <span class="alert-icon">✓</span>
+            <span th:text="${logout}">Déconnecté</span>
+        </div>
+        <div th:if="${success}" class="manga-alert alert-success">
+            <span class="alert-icon">★</span>
+            <span th:text="${success}">Succès</span>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form th:action="@{/login}" method="post" class="manga-form">
+            <div class="form-group">
+                <label class="form-label">PSEUDO</label>
+                <input type="text" name="username" class="manga-input" placeholder="Ton pseudo manga-ka..." required autofocus/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">MOT DE PASSE</label>
+                <input type="password" name="password" class="manga-input" placeholder="••••••••" required/>
+            </div>
+            <button type="submit" class="manga-btn btn-primary">
+                <span class="btn-text">ENTRER !!</span>
+                <span class="btn-flash">⚡</span>
+            </button>
+        </form>
+
+        <div class="auth-divider">
+            <span>— ou —</span>
+        </div>
+
+        <a th:href="@{/register}" class="manga-btn btn-secondary">
+            CRÉER UN COMPTE
+        </a>
+    </div>
+
+    <!-- HALFTONE DOTS -->
+    <div class="halftone-bg" aria-hidden="true"></div>
+</div>
+
+<script th:src="@{/js/manga.js}"></script>
+</body>
+</html>

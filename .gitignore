@@ -1,0 +1,10 @@
+target/
+*.log
+*.tmp
+.idea/
+.vscode/
+*.iml
+.DS_Store
+data/
+server.log
+server.err

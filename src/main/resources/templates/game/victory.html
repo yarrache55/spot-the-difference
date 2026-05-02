@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>VICTOIRE ! — Spot the Difference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/manga.css}"/>
+</head>
+<body class="menu-body victory-body">
+
+<main class="victory-main">
+    <div class="victory-panel manga-panel">
+        <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+
+        <div class="victory-stars">★ ★ ★</div>
+        <h1 class="manga-title victory-title">
+            FÉLICITATIONS<br/>
+            <span class="title-accent" th:text="${player != null ? player.username : 'JOUEUR'}">JOUEUR</span>
+            <br/>!!
+        </h1>
+        <p class="victory-sub">Tu as complété tous les niveaux !<br/>Ton œil de manga-ka est légendaire !</p>
+
+        <div class="victory-stats" th:if="${player != null}">
+            <div class="stat-box">
+                <div class="stat-value" th:text="${player.totalScore}">0</div>
+                <div class="stat-label">SCORE TOTAL</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" th:text="${player.bestScore}">0</div>
+                <div class="stat-label">MEILLEUR</div>
+            </div>
+        </div>
+
+        <div class="victory-actions">
+            <a th:href="@{/game/1}" class="manga-btn btn-primary">REJOUER !</a>
+            <a th:href="@{/leaderboard}" class="manga-btn btn-secondary">CLASSEMENT</a>
+        </div>
+    </div>
+</main>
+
+<div class="speed-lines" aria-hidden="true">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+</div>
+
+<script th:src="@{/js/manga.js}"></script>
+</body>
+</html>
